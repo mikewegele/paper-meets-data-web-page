@@ -7,9 +7,9 @@ import {BuildingElement} from "../map/MapBuildingScreen";
 interface Props {
     type: BuildingElement;
     imageUrl: string;
-    title: string;
-    price: number;
-    energyRequired: number;
+    title?: string;
+    price?: number;
+    energyRequired?: number;
     viewType: "map" | "browse";
 }
 

@@ -1,6 +1,30 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {Box} from "@mui/material";
+import {makeStyles} from "tss-react/mui";
 import CityCard from "../browsebuilding/CityCard";
+import ConnectionLines from "../../../components/map/ConnectionLines";
+
+const useStyles = makeStyles()(() => ({
+    mapContainer: {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+    },
+    svgStyle: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        zIndex: 1,
+        width: "100%",
+        height: "100%",
+    },
+    cardContainer: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        zIndex: 2,
+    }
+}));
 
 export type BuildingElementBuildingBlock = "familyHouse" | "skyscraper";
 export type BuildingElementEnergyProvider = "coalPowerPlant" | "nuclearEnergy" | "windmill" | "solarPanel";
@@ -11,31 +35,30 @@ export type BuildingElement =
     | BuildingElementEnergyProvider
     | BuildingElementEnergyStorage;
 
-interface Element {
+export interface DataElement {
     id: number;
     building: BuildingElement;
     nextId?: number | number[];
 }
 
-const data: Element[] = [
-    {id: 1, building: "coalPowerPlant", nextId: 6},
-    {id: 2, building: "nuclearEnergy", nextId: 6},
-    {id: 3, building: "windmill", nextId: 6},
-    {id: 4, building: "windmill", nextId: 6},
-    {id: 5, building: "solarPanel", nextId: [6, 7, 8, 9]},
-    {id: 6, building: "battery", nextId: [10, 11]},
-    {id: 7, building: "skyscraper"},
-    {id: 8, building: "skyscraper"},
-    {id: 9, building: "skyscraper"},
-    {id: 10, building: "familyHouse"},
-    {id: 11, building: "familyHouse"},
-];
+const MapBuildingScreen: React.FC = () => {
+    const {classes} = useStyles();
 
-interface MapBuildingScreenProps {
-}
+    const data: DataElement[] = [
+        {id: 1, building: "coalPowerPlant", nextId: 6},
+        {id: 2, building: "nuclearEnergy", nextId: 6},
+        {id: 3, building: "windmill", nextId: 6},
+        {id: 4, building: "windmill", nextId: 6},
+        {id: 5, building: "solarPanel", nextId: [6, 7, 8, 9]},
+        {id: 6, building: "battery", nextId: [10, 11]},
+        {id: 7, building: "skyscraper"},
+        {id: 8, building: "skyscraper"},
+        {id: 9, building: "skyscraper"},
+        {id: 10, building: "familyHouse"},
+        {id: 11, building: "familyHouse"},
+    ];
 
-const MapBuildingScreen: React.FC<MapBuildingScreenProps> = () => {
-    const getElementPosition = (id: number, nextIds?: number | number[]) => {
+    const getElementPosition = useCallback((id: number, nextIds?: number | number[]) => {
         const spacing = 250;
         const screenWidth = window.innerWidth;
         const maxCardsInRow = 4;
@@ -55,53 +78,15 @@ const MapBuildingScreen: React.FC<MapBuildingScreenProps> = () => {
         const col = id % maxCardsInRow;
 
         return {top: row * rowHeight, left: positionX + col * spacing};
-    };
-
-    const renderConnections = () => {
-        const lines: any[] = [];
-        data.forEach((element) => {
-            const {id, nextId} = element;
-            const currentPosition = getElementPosition(id, nextId);
-
-            if (nextId) {
-                const nextIds = Array.isArray(nextId) ? nextId : [nextId];
-                nextIds.forEach((nextId) => {
-                    const nextPosition = getElementPosition(nextId);
-
-                    lines.push(
-                        <line
-                            key={`line-${id}-${nextId}`}
-                            x1={currentPosition.left + 100}
-                            y1={currentPosition.top + 150}
-                            x2={nextPosition.left + 100}
-                            y2={nextPosition.top + 150}
-                            stroke="black"
-                            strokeWidth="2"
-                        />
-                    );
-                });
-            }
-        });
-
-        return lines;
-    };
+    }, []);
 
     return (
-        <Box sx={{position: "relative", width: "100%", height: "100%"}}>
-            <svg
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    zIndex: 1,
-                    width: "100%",
-                    height: "100%",
-                }}
-            >
-                {renderConnections()}
+        <Box className={classes.mapContainer}>
+            <svg className={classes.svgStyle}>
+                <ConnectionLines data={data} getElementPosition={getElementPosition}/>
             </svg>
 
-            <Box sx={{position: "absolute", top: 0, left: 0, zIndex: 2}}>
+            <Box className={classes.cardContainer}>
                 {data.map((element) => {
                     const {id, building} = element;
                     const position = getElementPosition(id, element.nextId);
