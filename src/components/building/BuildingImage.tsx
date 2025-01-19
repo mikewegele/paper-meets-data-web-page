@@ -3,7 +3,7 @@ import {CardMedia} from "@mui/material";
 
 interface Props {
     imageUrl: string;
-    title: string;
+    title?: string;
 }
 
 const BuildingImage: React.FC<Props> = props => {
