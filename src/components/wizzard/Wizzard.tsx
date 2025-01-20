@@ -4,7 +4,7 @@ import If from "../../components/conditionals/If";
 
 const useStyles = makeStyles()(() => ({
     wizzardContainer: {
-        position: "absolute",
+        position: "fixed",
         top: "0",
         left: "0",
         height: "100vh",
@@ -23,6 +23,7 @@ const useStyles = makeStyles()(() => ({
         textAlign: "center",
         color: "#4caf50",
         padding: "20px",
+        position: "relative",
     }
 }));
 
