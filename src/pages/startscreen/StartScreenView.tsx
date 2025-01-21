@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import {Box, Button} from "@mui/material";
 import CityScore from "./CityScore";
-import BrowseBuildingView from "./browsebuilding/BrowseBuildingView";
 import If from "../../components/conditionals/If";
-import MapBuildingScreen from "./map/MapBuildingScreen";
 import WizardStart from "../../components/wizzard/WizardStart";
+import Dnd from "./drag/Dnd";
 
 interface Props {
     score: number;
@@ -38,21 +37,6 @@ const StartScreenView: React.FC<Props> = ({score, co2, power, efficiency}) => {
 
             <Box sx={{display: 'flex', justifyContent: 'center', mb: 2}}>
                 <Button
-                    variant={!isBrowseBuildings ? "contained" : "outlined"}
-                    color="success"
-                    onClick={toggleView}>
-                    Map
-                </Button>
-                <Button
-                    variant={isBrowseBuildings ? "contained" : "outlined"}
-                    color="success"
-                    sx={{mr: 2}}
-                    onClick={toggleView}>
-                    Browse Buildings
-                </Button>
-            </Box>
-            <Box sx={{display: 'flex', justifyContent: 'center', mb: 2}}>
-                <Button
                     variant="contained"
                     color="success"
                     sx={{mr: 2}}
@@ -60,12 +44,7 @@ const StartScreenView: React.FC<Props> = ({score, co2, power, efficiency}) => {
                     Run Simulation
                 </Button>
             </Box>
-            <If condition={isBrowseBuildings}>
-                <BrowseBuildingView/>
-            </If>
-            <If condition={!isBrowseBuildings}>
-                <MapBuildingScreen/>
-            </If>
+            <Dnd/>
             <If condition={isSimulationActive}>
                 <WizardStart onClose={handleSimulationEnd}/>
             </If>
