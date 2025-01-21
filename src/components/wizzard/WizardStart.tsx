@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import Wizard from "./Wizard";
-import { makeStyles } from "tss-react/mui";
-import { Box, Button, CircularProgress, LinearProgress, Typography } from "@mui/material";
+import {makeStyles} from "tss-react/mui";
+import {Box, Button, CircularProgress, LinearProgress, Typography} from "@mui/material";
 import If from "../../components/conditionals/If";
 import WindIcon from "@mui/icons-material/Air";
 import SunsetIcon from "@mui/icons-material/WbTwilight"
-import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 import CityScore from "../../pages/startscreen/CityScore";
 import ErrorIcon from '@mui/icons-material/Error';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
@@ -15,10 +14,20 @@ import NightsStayIcon from '@mui/icons-material/NightsStay';
 import simulationData from './week_weather_simulation.json';
 
 const useStyles = makeStyles()(() => ({
+    cityScore: {
+        background: "none"
+    },
+    card: {
+        backgroundColor: "#dbdbdb"
+    },
     wizardStartH2: {
         fontSize: "2rem",
         marginTop: "100px",
         marginBottom: "30px",
+    },
+    simulationResults: {
+        marginTop: "30px",
+        fontSize: "2rem",
     },
     wizardStartP: {
         color: "grey",
@@ -119,9 +128,7 @@ const useStyles = makeStyles()(() => ({
         alignItems: "center",
         justifyContent: "center",
     },
-    wizardSimulationPercentage: {
-
-    }
+    wizardSimulationPercentage: {}
 }));
 
 interface Props {
@@ -140,7 +147,7 @@ const WizardStart: React.FC<Props> = (props) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [currentData, setCurrentData] = useState(simulationData[0]);
 
-    const { classes } = useStyles();
+    const {classes} = useStyles();
     const hints = [
         "Solar panels are a great investment for a green city. They harness the power of the sun, reducing your reliance on fossil fuels and lowering your carbon footprint.",
         "Don't forget to position wind turbines in areas with consistent, strong winds. The more wind, the more energy you can generate!",
@@ -230,14 +237,14 @@ const WizardStart: React.FC<Props> = (props) => {
                 <div className={classes.wizardSave}>
                     <Typography variant="h2" className={classes.wizardSimulationH2}>Your test results will be
                         saved...</Typography>
-                    <CircularProgress color="success" />
+                    <CircularProgress color="success"/>
                 </div>
             </Wizard>
         ) : isProgressFinished ? (
             <Wizard closable={false} onClose={props.onClose}>
-                <Typography variant="h2" className={classes.wizardStartH2}>Simulation Results</Typography>
-                <LinearProgress variant="determinate" value={progress} />
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                <Typography variant="h2" className={classes.simulationResults}>Simulation Results</Typography>
+                <LinearProgress variant="determinate" value={progress}/>
+                <Box sx={{display: 'flex', justifyContent: 'center', mb: 2, mt: 2, gap: 4}}>
                     <Button
                         variant={!isDetailsView ? "contained" : "outlined"}
                         color="success"
@@ -247,7 +254,7 @@ const WizardStart: React.FC<Props> = (props) => {
                     <Button
                         variant={isDetailsView ? "contained" : "outlined"}
                         color="success"
-                        sx={{ mr: 2 }}
+                        sx={{mr: 2}}
                         onClick={toggleDetailsView}>
                         Details
                     </Button>
@@ -256,22 +263,22 @@ const WizardStart: React.FC<Props> = (props) => {
                     <div className={classes.wizardResultEntryContainer}>
                         <Typography variant="h2">Day {Math.floor(currentStep / 24) + 1}</Typography>
                         <div className={classes.wizardResultEntry}>
-                            <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large" />
+                            <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large"/>
                             <Typography>Energy was not covered.</Typography>
                             <Box className={classes.wizardResultEntryDetails}>
-                                <Button endIcon={<WindIcon />} disabled>{`${currentData.windSpeed} km/h`}</Button>
-                                <Button endIcon={<SunsetIcon />} disabled>{currentData.hour}</Button>
+                                <Button endIcon={<WindIcon/>} disabled>{`${currentData.windSpeed} km/h`}</Button>
+                                <Button endIcon={<SunsetIcon/>} disabled>{currentData.hour}</Button>
                                 <If condition={currentData.weather === "sunny"}>
-                                    <Button endIcon={<WbSunnyIcon />} disabled></Button>
+                                    <Button endIcon={<WbSunnyIcon/>} disabled></Button>
                                 </If>
                                 <If condition={currentData.weather === "rainy"}>
-                                    <Button endIcon={<WaterDropIcon />} disabled></Button>
+                                    <Button endIcon={<WaterDropIcon/>} disabled></Button>
                                 </If>
                                 <If condition={currentData.weather === "cloudy"}>
-                                    <Button endIcon={<WbCloudyIcon />} disabled></Button>
+                                    <Button endIcon={<WbCloudyIcon/>} disabled></Button>
                                 </If>
                                 <If condition={currentData.weather === "night"}>
-                                    <Button endIcon={<NightsStayIcon />} disabled></Button>
+                                    <Button endIcon={<NightsStayIcon/>} disabled></Button>
                                 </If>
                             </Box>
                         </div>
@@ -279,19 +286,25 @@ const WizardStart: React.FC<Props> = (props) => {
                     <div className={classes.wizardResultEntryContainer}>
                         <Typography variant="h2">Total</Typography>
                         <div className={classes.wizardResultEntry}>
-                            <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large" />
+                            <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large"/>
                             <Typography>CO2 Footprint is very high.</Typography>
                         </div>
                     </div>
                 </If>
                 <If condition={!isDetailsView}>
-                    <CityScore score={4} co2={5} power={4} efficiency={3} />
+                    <CityScore
+                        cityScoreClassName={classes.cityScore}
+                        cardClassName={classes.card}
+                        score={4}
+                        co2={5}
+                        power={4}
+                        efficiency={3}/>
                 </If>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                <Box sx={{display: 'flex', justifyContent: 'center', mb: 2}}>
                     <Button
                         variant="contained"
                         color="success"
-                        sx={{ mr: 2 }}
+                        sx={{mr: 2, mt: 2}}
                         onClick={saveResults}>
                         Continue
                     </Button>
@@ -308,12 +321,12 @@ const WizardStart: React.FC<Props> = (props) => {
                 <Typography className={classes.wizardStartP}>Press start to continue or close this window to further
                     construct
                     your city.</Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                <Box sx={{display: 'flex', justifyContent: 'center', mb: 2}}>
                     <Button
                         className={classes.startButton}
                         variant="contained"
                         color="success"
-                        sx={{ mr: 2 }}
+                        sx={{mr: 2}}
                         onClick={startSimulation}>
                         Start
                     </Button>
@@ -328,22 +341,23 @@ const WizardStart: React.FC<Props> = (props) => {
                 <Typography className={classes.wizardSimulationSubheader}>Please wait while your City Build is being
                     tested in a
                     simulation.</Typography>
-                <LinearProgress variant="determinate" value={progress} />
+                <LinearProgress variant="determinate" value={progress}/>
                 <Typography className={classes.wizardSimulationDay}>Day {Math.floor(currentStep / 24) + 1}</Typography>
                 <Box className={classes.wizardSimulationProperties}>
-                    <Button className={classes.button} endIcon={<WindIcon />} disabled>{`${currentData.windSpeed} km/h`}</Button>
-                    <Button className={classes.button} endIcon={<SunsetIcon />} disabled>{currentData.hour}</Button>
+                    <Button className={classes.button} endIcon={<WindIcon/>}
+                            disabled>{`${currentData.windSpeed} km/h`}</Button>
+                    <Button className={classes.button} endIcon={<SunsetIcon/>} disabled>{currentData.hour}</Button>
                     <If condition={currentData.weather === "sunny"}>
-                        <Button className={classes.button} endIcon={<WbSunnyIcon />} disabled></Button>
+                        <Button className={classes.button} endIcon={<WbSunnyIcon/>} disabled></Button>
                     </If>
                     <If condition={currentData.weather === "rainy"}>
-                        <Button className={classes.button} endIcon={<WaterDropIcon />} disabled></Button>
+                        <Button className={classes.button} endIcon={<WaterDropIcon/>} disabled></Button>
                     </If>
                     <If condition={currentData.weather === "cloudy"}>
-                        <Button className={classes.button} endIcon={<WbCloudyIcon />} disabled></Button>
+                        <Button className={classes.button} endIcon={<WbCloudyIcon/>} disabled></Button>
                     </If>
                     <If condition={currentData.weather === "night"}>
-                        <Button className={classes.button} endIcon={<NightsStayIcon />} disabled></Button>
+                        <Button className={classes.button} endIcon={<NightsStayIcon/>} disabled></Button>
                     </If>
                 </Box>
                 <Box className={classes.wizardSimulationMeasures}>

@@ -22,7 +22,7 @@ const useStyles = makeStyles()(() => ({
         alignItems: "center",
     },
     wizard: {
-        height: "60vh",
+        minHeight: "60vh",
         width: "70vw",
         backgroundColor: "white",
         borderRadius: "50px",

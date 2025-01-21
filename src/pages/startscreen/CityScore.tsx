@@ -52,6 +52,8 @@ const useStyles = makeStyles()(() => ({
 }));
 
 interface Props {
+    cityScoreClassName?: string;
+    cardClassName?: string;
     score: number; // Number of filled stars (0-5)
     co2: number;
     power: number;
@@ -62,7 +64,7 @@ const CityScore: React.FC<Props> = props => {
 
     const {score, co2, power, efficiency} = props;
 
-    const {classes} = useStyles();
+    const {classes, cx} = useStyles();
     const [expanded, setExpanded] = useState(false);
 
     const renderStars = (filledStars: number) => {
@@ -76,8 +78,8 @@ const CityScore: React.FC<Props> = props => {
     };
 
     return (
-        <Box className={classes.container}>
-            <Box className={classes.card}>
+        <Box className={cx(classes.container, props.cityScoreClassName)}>
+            <Box className={cx(classes.card, props.cardClassName)}>
                 <Typography className={classes.title}>City Score</Typography>
                 <Box className={classes.stars}>{renderStars(score)}</Box>
                 <ToggleButton
