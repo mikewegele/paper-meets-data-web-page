@@ -1,0 +1,76 @@
+
+html,
+body {
+    margin: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+}
+
+.dndflow {
+    border: 1px solid black;
+    background: #e8f5e9;
+    flex-direction: column;
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.react-flow__panel {
+    display: none;
+}
+
+.react-flow__node {
+    border-radius: 2px !important;
+    border: 1px;
+    padding: 6px;
+    width: max-content;
+}
+
+.dndflow aside {
+    border-left: 1px solid black;
+    padding: 15px 10px;
+    font-size: 12px;
+}
+
+.react-flow {
+    background: none !important;
+}
+
+.dndflow aside .description {
+    margin-bottom: 10px;
+}
+
+.dndflow .reactflow-wrapper {
+    flex-grow: 1;
+    height: 100%;
+}
+
+.dndnode .dndnode .dndnode {
+    width: fit-content;
+    height: fit-content !important;
+}
+
+.dndflow .selectall {
+    margin-top: 10px;
+}
+
+
+.react-flow {
+    background: none;
+}
+
+@media screen and (min-width: 768px) {
+    .dndflow {
+        flex-direction: row;
+    }
+
+    .dndflow aside {
+        width: 30%;
+        max-width: 250px;
+    }
+}
