@@ -303,7 +303,7 @@ const WizardStart: React.FC<Props> = (props) => {
                     <Typography className={classes.measuringP}>Measuring CO2 Footprint...</Typography>
                 </Box>
                 <Box className={classes.wizardSimulationTipp}>
-                    <p>Hint: {hints[currentHintIndex]}</p>
+                    <Typography>Hint: {hints[currentHintIndex]}</Typography>
                 </Box>
             </Wizard>
         )));
