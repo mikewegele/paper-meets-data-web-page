@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import Wizzard from "./Wizzard";
-import { makeStyles } from "tss-react/mui";
-import { Box, Button, CircularProgress, LinearProgress } from "@mui/material";
+import React, {useCallback, useEffect, useState} from "react";
+import Wizard from "./Wizard";
+import {makeStyles} from "tss-react/mui";
+import {Box, Button, CircularProgress, LinearProgress, Typography} from "@mui/material";
 import If from "../../components/conditionals/If";
 import WindIcon from "@mui/icons-material/Air";
 import SunsetIcon from "@mui/icons-material/WbTwilight"
@@ -10,25 +10,25 @@ import CityScore from "../../pages/startscreen/CityScore";
 import ErrorIcon from '@mui/icons-material/Error';
 
 const useStyles = makeStyles()(() => ({
-
-    wizzardStartH2: {
+    wizardStartH2: {
         fontSize: "2rem",
         marginTop: "100px",
+        marginBottom: "30px",
     },
-    wizzardStartP: {
+    wizardStartP: {
         color: "grey",
     },
-    wizzardSimulationH2: {
+    wizardSimulationH2: {
         fontSize: "2rem",
         marginRight: "20px",
     },
-    wizzardSimulationHeader: {
+    wizardSimulationHeader: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         marginBottom: "10px",
     },
-    wizzardSimulationSubheader: {
+    wizardSimulationSubheader: {
         color: "grey",
         position: "absolute",
         top: "75px",
@@ -36,11 +36,12 @@ const useStyles = makeStyles()(() => ({
         left: "calc(50% - 250px)",
         fontSize: "0.8rem"
     },
-    wizzardSimulationDay: {
+    wizardSimulationDay: {
         fontWeight: "bold",
-        fontSize: "1.4rem",
+        fontSize: "1.2rem",
+        marginTop: "25px"
     },
-    wizzardSimulationProperties: {
+    wizardSimulationProperties: {
         display: "flex",
         justifyContent: "space-between",
     },
@@ -49,7 +50,15 @@ const useStyles = makeStyles()(() => ({
         fontSize: "1.4rem",
         width: "400px"
     },
-    wizzardSimulationMeasures: {
+    startButton: {
+        marginTop: "30px"
+    },
+    measuringP: {
+        color: "#4caf50",
+        fontSize: "1.4rem",
+        padding: "5px"
+    },
+    wizardSimulationMeasures: {
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
@@ -57,7 +66,7 @@ const useStyles = makeStyles()(() => ({
         height: "40%",
         fontSize: "1.4rem"
     },
-    wizzardSimulationTipp: {
+    wizardSimulationTipp: {
         backgroundColor: "#dedede",
         height: "100px",
         position: "absolute",
@@ -73,11 +82,11 @@ const useStyles = makeStyles()(() => ({
         lineHeight: "40px",
         fontSize: "1.2rem"
     },
-    wizzardResultEntryContainer: {
+    wizardResultEntryContainer: {
         textAlign: "left",
         margin: "20px 0"
     },
-    wizzardResultEntry: {
+    wizardResultEntry: {
         backgroundColor: "#dedede",
         borderRadius: "50px",
         position: "relative",
@@ -87,18 +96,18 @@ const useStyles = makeStyles()(() => ({
         alignItems: "center",
         justifyContent: "center"
     },
-    wizzardResultEntryDetails: {
+    wizardResultEntryDetails: {
         display: "flex",
         position: "absolute",
         right: "20px",
         bottom: "0",
         fontSize: "0.8rem"
     },
-    wizzardResultEntryErrorIcon: {
+    wizardResultEntryErrorIcon: {
         position: "absolute",
         left: "20px",
     },
-    wizzardSave: {
+    wizardSave: {
         height: "100%",
         display: "flex",
         flexDirection: "column",
@@ -107,24 +116,25 @@ const useStyles = makeStyles()(() => ({
     }
 }));
 
-interface WizzardStartProps {
+interface Props {
     onClose: () => void;
 }
 
-const WizzardStart: React.FC<WizzardStartProps> = (props) => {
+const WizardStart: React.FC<Props> = (props) => {
+
     const [isSimulationActive, setIsSimulationActive] = useState(false);
-    const [currentTippIndex, setCurrentTippIndex] = useState(0);
+    const [currentHintIndex, setCurrentHintIndex] = useState(0);
     const [progress, setProgress] = useState<number>(40);
     const [isProgressFinished, setIsProgressFinished] = useState(false);
     const [isDetailsView, setIsDetailsView] = useState(false);
     const [isSaveResults, setIsSaveResults] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
 
-    const { classes } = useStyles();
+    const {classes} = useStyles();
     const day = 4;
     const windSpeed = 4;
     const time = "17:00";
-    const tips = [
+    const hints = [
         "Solar panels are a great investment for a green city. They harness the power of the sun, reducing your reliance on fossil fuels and lowering your carbon footprint.",
         "Don't forget to position wind turbines in areas with consistent, strong winds. The more wind, the more energy you can generate!",
         "Energy-efficient buildings help conserve resources and reduce waste. Upgrade your buildings whenever possible to save on energy costs and lower emissions.",
@@ -137,22 +147,20 @@ const WizzardStart: React.FC<WizzardStartProps> = (props) => {
         "Build green spaces like parks and gardens to enhance the quality of life in your city. Happy residents are more productive and contribute to the city's growth.",
     ];
 
-    const toggleTotalView = () => {
+    const toggleTotalView = useCallback(() => {
         setIsDetailsView(false);
-    };
+    }, []);
 
-    const toggleDetialsView = () => {
+    const toggleDetailsView = useCallback(() => {
         setIsDetailsView(true);
-    };
+    }, []);
 
-    const startSimulation = () => {
+    const startSimulation = useCallback(() => {
         console.log(isSimulationActive)
-        if (!isSimulationActive) {
-            setIsSimulationActive(!isSimulationActive);
-        }
-    };
+        !isSimulationActive && setIsSimulationActive(!isSimulationActive);
+    }, [isSimulationActive]);
 
-    const saveResults = () => {
+    const saveResults = useCallback(() => {
         setIsSaveResults(true)
         const interval = setInterval(() => {
             setIsSimulationActive(false)
@@ -164,7 +172,7 @@ const WizzardStart: React.FC<WizzardStartProps> = (props) => {
         }, 3000);
         setIsFinished(false)
         return () => clearInterval(interval);
-    };
+    }, []);
 
     useEffect(() => {
         if (isSaveResults) {
@@ -178,32 +186,31 @@ const WizzardStart: React.FC<WizzardStartProps> = (props) => {
             setIsSaveResults(false)
             setIsFinished(false)
         }
-        if (progress == 100) {
-            setIsProgressFinished(true)
-        }
+        progress === 100 && setIsProgressFinished(true)
         if (isSimulationActive) {
             const interval = setInterval(() => {
-                setCurrentTippIndex((prevIndex) => (prevIndex + 1) % tips.length);
+                setCurrentHintIndex((prevIndex) => (prevIndex + 1) % hints.length);
             }, 3000);
             return () => clearInterval(interval);
         }
         console.log("Simulation Active:" + isSimulationActive)
-        console.log("Progess" + progress)
-    }, [isSimulationActive]);
+        console.log("Progress" + progress)
+    }, [isSaveResults, isSimulationActive, progress, hints.length]);
 
     return isFinished ? null
         : (isSaveResults ? (
-            <Wizzard closable={false} onClose={props.onClose}>
-                <div className={classes.wizzardSave}>
-                    <h2 className={classes.wizzardSimulationH2}>Your test results will be saved...</h2>
-                    <CircularProgress color="success" />
+            <Wizard closable={false} onClose={props.onClose}>
+                <div className={classes.wizardSave}>
+                    <Typography variant="h2" className={classes.wizardSimulationH2}>Your test results will be
+                        saved...</Typography>
+                    <CircularProgress color="success"/>
                 </div>
-            </Wizzard>
+            </Wizard>
         ) : isProgressFinished ? (
-            <Wizzard closable={false} onClose={props.onClose}>
-                <h2 className={classes.wizzardStartH2}>Simulation Results</h2>
-                <LinearProgress variant="determinate" value={progress} />
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Wizard closable={false} onClose={props.onClose}>
+                <Typography variant="h2" className={classes.wizardStartH2}>Simulation Results</Typography>
+                <LinearProgress variant="determinate" value={progress}/>
+                <Box sx={{display: 'flex', justifyContent: 'center', mb: 2}}>
                     <Button
                         variant={!isDetailsView ? "contained" : "outlined"}
                         color="success"
@@ -213,84 +220,93 @@ const WizzardStart: React.FC<WizzardStartProps> = (props) => {
                     <Button
                         variant={isDetailsView ? "contained" : "outlined"}
                         color="success"
-                        sx={{ mr: 2 }}
-                        onClick={toggleDetialsView}>
+                        sx={{mr: 2}}
+                        onClick={toggleDetailsView}>
                         Details
                     </Button>
                 </Box>
                 <If condition={isDetailsView}>
-                    <div className={classes.wizzardResultEntryContainer}>
-                        <h2>Day 2</h2>
-                        <div className={classes.wizzardResultEntry}>
-                            <ErrorIcon className={classes.wizzardResultEntryErrorIcon} fontSize="large" />
+                    <div className={classes.wizardResultEntryContainer}>
+                        <Typography variant="h2">Day 2</Typography>
+                        <div className={classes.wizardResultEntry}>
+                            <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large"/>
                             <p>Energy was not covered.</p>
-                            <Box className={classes.wizzardResultEntryDetails}>
-                                <Button endIcon={<WindIcon />} disabled>{`${windSpeed} km/h`}</Button>
-                                <Button endIcon={<SunsetIcon />} disabled>{time}</Button>
-                                <Button endIcon={<ThunderstormIcon />} disabled></Button>
+                            <Box className={classes.wizardResultEntryDetails}>
+                                <Button endIcon={<WindIcon/>} disabled>{`${windSpeed} km/h`}</Button>
+                                <Button endIcon={<SunsetIcon/>} disabled>{time}</Button>
+                                <Button endIcon={<ThunderstormIcon/>} disabled></Button>
                             </Box>
                         </div>
                     </div>
-                    <div className={classes.wizzardResultEntryContainer}>
-                        <h2>Total</h2>
-                        <div className={classes.wizzardResultEntry}>
-                            <ErrorIcon className={classes.wizzardResultEntryErrorIcon} fontSize="large" />
-                            <p>CO2 Footprint is very high.</p>
+                    <div className={classes.wizardResultEntryContainer}>
+                        <Typography variant="h2">Total</Typography>
+                        <div className={classes.wizardResultEntry}>
+                            <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large"/>
+                            <Typography>CO2 Footprint is very high.</Typography>
                         </div>
                     </div>
                 </If>
                 <If condition={!isDetailsView}>
-                    <CityScore score={4} co2={5} power={4} efficiency={3} />
+                    <CityScore score={4} co2={5} power={4} efficiency={3}/>
                 </If>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                <Box sx={{display: 'flex', justifyContent: 'center', mb: 2}}>
                     <Button
                         variant="contained"
                         color="success"
-                        sx={{ mr: 2 }}
+                        sx={{mr: 2}}
                         onClick={saveResults}>
                         Continue
                     </Button>
                 </Box>
-            </Wizzard>
+            </Wizard>
         ) : (!isSimulationActive ? (
-            <Wizzard closable={true} onClose={props.onClose}>
-                <h2 className={classes.wizzardStartH2}>Do you want to start the simulation to test you City Build?</h2>
-                <p className={classes.wizzardStartP}>The simulation can take a while to finish. Your city will be tested in different scenarios to get you a rating based on stability, efficiency and satisfaction.</p>
-                <p className={classes.wizzardStartP}>Press start to continue or close this window to further construct your city.</p>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Wizard closable={true} onClose={props.onClose}>
+                <Typography variant="h2" className={classes.wizardStartH2}>Do you want to start the simulation to test
+                    you City Build?</Typography>
+                <Typography className={classes.wizardStartP}>The simulation can take a while to finish. Your city will
+                    be tested
+                    in different scenarios to get you a rating based on stability, efficiency and
+                    satisfaction.</Typography>
+                <Typography className={classes.wizardStartP}>Press start to continue or close this window to further
+                    construct
+                    your city.</Typography>
+                <Box sx={{display: 'flex', justifyContent: 'center', mb: 2}}>
                     <Button
+                        className={classes.startButton}
                         variant="contained"
                         color="success"
-                        sx={{ mr: 2 }}
+                        sx={{mr: 2}}
                         onClick={startSimulation}>
                         Start
                     </Button>
                 </Box>
-            </Wizzard>
+            </Wizard>
         ) : (
-            <Wizzard closable={false} onClose={props.onClose}>
-                <div className={classes.wizzardSimulationHeader}>
-                    <h2 className={classes.wizzardSimulationH2}>Running Simulation</h2>
-                    <CircularProgress color="success" />
+            <Wizard closable={false} onClose={props.onClose}>
+                <div className={classes.wizardSimulationHeader}>
+                    <Typography variant="h2" className={classes.wizardSimulationH2}>Running Simulation</Typography>
+                    <CircularProgress color="success"/>
                 </div>
-                <p className={classes.wizzardSimulationSubheader}>Please wait while your City Build is being tested in a simulation.</p>
-                <LinearProgress variant="determinate" value={progress} />
-                <p className={classes.wizzardSimulationDay}>Day {day}</p>
-                <Box className={classes.wizzardSimulationProperties}>
-                    <Button className={classes.button} endIcon={<WindIcon />} disabled>{`${windSpeed} km/h`}</Button>
-                    <Button className={classes.button} endIcon={<SunsetIcon />} disabled>{time}</Button>
-                    <Button className={classes.button} endIcon={<ThunderstormIcon />} disabled></Button>
+                <Typography className={classes.wizardSimulationSubheader}>Please wait while your City Build is being
+                    tested in a
+                    simulation.</Typography>
+                <LinearProgress variant="determinate" value={progress}/>
+                <Typography className={classes.wizardSimulationDay}>Day {day}</Typography>
+                <Box className={classes.wizardSimulationProperties}>
+                    <Button className={classes.button} endIcon={<WindIcon/>} disabled>{`${windSpeed} km/h`}</Button>
+                    <Button className={classes.button} endIcon={<SunsetIcon/>} disabled>{time}</Button>
+                    <Button className={classes.button} endIcon={<ThunderstormIcon/>} disabled></Button>
                 </Box>
-                <Box className={classes.wizzardSimulationMeasures}>
-                    <p className={classes.button}>Measuring Energy Production...</p>
-                    <p className={classes.button}>Measuring Energy Consumption...</p>
-                    <p className={classes.button}>Measuring CO2 Footprint...</p>
+                <Box className={classes.wizardSimulationMeasures}>
+                    <Typography className={classes.measuringP}>Measuring Energy Production...</Typography>
+                    <Typography className={classes.measuringP}>Measuring Energy Consumption...</Typography>
+                    <Typography className={classes.measuringP}>Measuring CO2 Footprint...</Typography>
                 </Box>
-                <Box className={classes.wizzardSimulationTipp}>
-                    <p>Tipp: {tips[currentTippIndex]}</p>
+                <Box className={classes.wizardSimulationTipp}>
+                    <p>Hint: {hints[currentHintIndex]}</p>
                 </Box>
-            </Wizzard>
+            </Wizard>
         )));
 }
 
-export default WizzardStart;
+export default WizardStart;
