@@ -4,7 +4,7 @@ import {makeStyles} from "tss-react/mui";
 const useStyles = makeStyles()(() => ({
     page: {
         height: "100vh",
-        width: "100%",
+        width: "100vw",
         backgroundColor: "#e8f5e9"
     }
 }));
