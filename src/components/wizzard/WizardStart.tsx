@@ -230,7 +230,7 @@ const WizardStart: React.FC<Props> = (props) => {
                         <Typography variant="h2">Day 2</Typography>
                         <div className={classes.wizardResultEntry}>
                             <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large"/>
-                            <p>Energy was not covered.</p>
+                            <Typography>Energy was not covered.</Typography>
                             <Box className={classes.wizardResultEntryDetails}>
                                 <Button endIcon={<WindIcon/>} disabled>{`${windSpeed} km/h`}</Button>
                                 <Button endIcon={<SunsetIcon/>} disabled>{time}</Button>
