@@ -18,7 +18,7 @@ const useStyles = makeStyles()(() => ({
         background: "none"
     },
     card: {
-        backgroundColor: "#dbdbdb"
+        backgroundColor: "#e8f5e9"
     },
     wizardStartH2: {
         fontSize: "2rem",
@@ -28,6 +28,7 @@ const useStyles = makeStyles()(() => ({
     simulationResults: {
         marginTop: "30px",
         fontSize: "2rem",
+        marginBottom: "10px"
     },
     wizardStartP: {
         color: "grey",
@@ -128,7 +129,7 @@ const useStyles = makeStyles()(() => ({
         alignItems: "center",
         justifyContent: "center",
     },
-    wizardSimulationPercentage: {}
+    wizardSimulationPercentage: {},
 }));
 
 interface Props {
