@@ -262,7 +262,7 @@ const WizardStart: React.FC<Props> = (props) => {
                 </Box>
                 <If condition={isDetailsView}>
                     <div className={classes.wizardResultEntryContainer}>
-                        <Typography variant="h2">Day {Math.floor(currentStep / 24) + 1}</Typography>
+                        <Typography variant="h4">Day {Math.floor(currentStep / 24) + 1}</Typography>
                         <div className={classes.wizardResultEntry}>
                             <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large"/>
                             <Typography>Energy was not covered.</Typography>
@@ -285,7 +285,7 @@ const WizardStart: React.FC<Props> = (props) => {
                         </div>
                     </div>
                     <div className={classes.wizardResultEntryContainer}>
-                        <Typography variant="h2">Total</Typography>
+                        <Typography variant="h4">Total</Typography>
                         <div className={classes.wizardResultEntry}>
                             <ErrorIcon className={classes.wizardResultEntryErrorIcon} fontSize="large"/>
                             <Typography>CO2 Footprint is very high.</Typography>
