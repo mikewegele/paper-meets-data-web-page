@@ -16,7 +16,7 @@ import Sidebar from './Sidebar';
 import {DnDProvider, useDnD} from './DndContext';
 
 let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => `dnfdnode_${id++}`;
 
 const Dnd: React.FC = () => {
     const reactFlowWrapper = useRef(null);
