@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hint Slider</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        body {
+            background-color: #e8f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hint-container {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .hint {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="hint-container" id="hint-box-container">
+    <div class="hint" id="hint-box">Hint wird geladen...</div>
+</div>
+
+<script>
+    const hints = [
+        "Solar panels are a great investment for a green city.",
+        "Don't forget to position wind turbines in areas with strong winds.",
+        "Energy-efficient buildings help conserve resources.",
+        "Think about public transport! Reduce traffic and CO2 emissions.",
+        "Energy storage systems allow you to store excess energy.",
+        "Planting trees improves air quality and provides cooling.",
+        "Monitor your energy grid's efficiency.",
+        "Geothermal energy provides stable, renewable power.",
+        "Recycling reduces waste and keeps the city clean.",
+        "Build green spaces to enhance quality of life."
+    ];
+
+    let index = 0;
+    const hintContainer = document.getElementById("hint-box-container");
+
+    function showHint(direction) {
+        const oldHint = document.getElementById("hint-box");
+        oldHint.style.transform = `translateX(${direction === "next" ? "-100%" : "100%"})`;
+        oldHint.style.opacity = "0";
+
+        setTimeout(() => {
+            oldHint.remove();
+
+            const newHint = document.createElement("div");
+            newHint.className = "hint";
+            index = (index + (direction === "next" ? 1 : -1) + hints.length) % hints.length;
+            newHint.textContent = hints[index];
+            newHint.style.transform = `translateX(${direction === "next" ? "100%" : "-100%"})`;
+            hintContainer.appendChild(newHint);
+
+            setTimeout(() => {
+                newHint.style.transform = "translateX(0)";
+                newHint.id = "hint-box";
+            }, 50);
+        }, 500);
+    }
+
+    setInterval(() => showHint("next"), 10000);
+    document.getElementById("hint-box").textContent = hints[index];
+
+    let startX = 0;
+
+    hintContainer.addEventListener("mousedown", (e) => {
+        startX = e.clientX;
+    });
+
+    hintContainer.addEventListener("mouseup", (e) => {
+        let endX = e.clientX;
+        if (startX - endX > 50) {
+            showHint("next");
+        } else if (endX - startX > 50) {
+            showHint("prev");
+        }
+    });
+
+
+</script>
+</body>
+</html>
