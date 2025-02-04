@@ -103,6 +103,19 @@
         }
     });
 
+    hintContainer.addEventListener("touchstart", (e) => {
+        startX = e.clientX;
+    });
+
+    hintContainer.addEventListener("touchend", (e) => {
+        let endX = e.clientX;
+        if (startX - endX > 50) {
+            showHint("next");
+        } else if (endX - startX > 50) {
+            showHint("prev");
+        }
+    });
+
 
 </script>
 </body>
